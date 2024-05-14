@@ -101,6 +101,124 @@ let activities = [
     }
 ];
 
-window.onload = function(){
+window.onload = function () {
+    initDropDownCatagory();
+ 
 
+    let actCatagories = document.querySelector("#selectCatagories");
+    actCatagories.addEventListener("change", initDropDownAct)
+
+    let actSelect = document.querySelector("#SelectOne");
+    actSelect.addEventListener("click", displayActivities);
+
+
+}
+
+function initDropDownCatagory() {
+
+    let categoriesDropDown = document.querySelector("#selectCatagories")
+
+    let defaultOptions = document.createElement("option");
+
+    defaultOptions.textContent = "Select a catagory"
+
+    defaultOptions.value = "";
+
+    categoriesDropDown.appendChild(defaultOptions);
+
+    let numCatagories = categories.length
+
+    for (let i = 0; i < numCatagories; i++) {
+
+        let newCatagory = document.createElement("option")
+
+        newCatagory.textContent = categories[i]
+
+        newCatagory.value = categories[i]
+
+
+        categoriesDropDown.appendChild(newCatagory)
+
+    }
+
+
+}
+function initDropDownAct() {
+
+    let dropDown = document.querySelector("#SelectOne");
+
+    dropDown.length= 0;
+
+
+    let defaultOptions = document.createElement("option");
+
+    defaultOptions.textContent = "Select a activities"
+
+    defaultOptions.value = "";
+
+    dropDown.appendChild(defaultOptions);
+
+    let actCatagories = document.querySelector("#selectCatagories").value
+
+    let matches = getActivitiesInCategory(activities, actCatagories); 
+
+    let numActivities = matches.length;
+
+    for (let i = 0; i < numActivities; i++) {
+
+        let newAct = document.createElement("option")
+
+        newAct.textContent = matches[i].name;
+
+        newAct.value = matches[i].id;
+
+        dropDown.appendChild(newAct)
+
+
+    }
+
+}
+function displayActivities(event) {
+
+
+    event.preventDefault();
+
+    let dropDown = document.querySelector("#SelectOne")
+
+    let resultsParagraph = document.querySelector("#results");
+
+    let selectedIndex = dropDown.selectedIndex - 1;
+
+    if (dropDown.value === "") {
+
+        resultsParagraph.innerHTML = "";
+        
+
+    } else {
+        let selectedAct = activities[selectedIndex]
+        resultsParagraph.innerHTML = `
+        <div> Category: ${selectedAct.category} </div>
+        <div> ID: ${selectedAct.id} </div>
+        <div> Name: ${selectedAct.name} </div>
+        <div> Description: ${selectedAct.description} </div>
+        <div> Location: ${selectedAct.location} </div>
+        <div> Price: ${selectedAct.price.toFixed(2)} </div> `
+    }
+
+}
+
+function getActivitiesInCategory(activities, category) {
+
+    let matching = [];
+
+    let numItems = activities.length;
+
+    for (let i = 0; i < numItems; i++) {
+        if (activities[i].category === category) {
+
+            matching.push(activities[i]);
+        }
+    }
+
+    return matching;
 }
